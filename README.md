@@ -1,6 +1,7 @@
 # FrontendAutoReload Module for WBCE CMS
 
 This module watches the `/templates/your_template` folder for file changes and triggers a reload in the frontend if changes are detected.
+It's basically an adaption of my [FrontendAutoReload module for ProcessWire CMS](https://github.com/digitalbricks/FrontendAutoReload).
 
 
 ## Requirements
