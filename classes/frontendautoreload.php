@@ -16,27 +16,35 @@ class FrontendAutoReload extends Wb {
     private array $excludedExtensions = ['jpeg', 'jpg', 'png', 'svg', 'gif'];
     private int $interval = 5;
     private string $watchedDir = '';
+    private string $template = DEFAULT_TEMPLATE; // NOTE: DEFAULT_TEMPLATE is always available in template context and also in the latest.php
 
+    /**
+     * FrontendAutoReload constructor.
+     * Sets the template and endpoint URL
+     */
     public function __construct()
     {
         parent::__construct();
 
         // if the constant TEMPLATE is not defined, set it to the default template
+        // NOTE: TEMPLATE is only available in the template context, not in latest.php
         if (!defined('TEMPLATE')) {
-            $sTemplate = DEFAULT_TEMPLATE;
-            if (isset($this->page['template']) and $this->page['template'] != '') {
-                if (file_exists(WB_PATH . '/templates/' . $this->page['template'] . '/index.php')) {
-                    $sTemplate = $this->page['template'];
-                }
-            }
-            define('TEMPLATE', $sTemplate);
+            define('TEMPLATE', $this->template);
         }
 
-        $this->watchedDir = WB_PATH. '/templates/' . TEMPLATE;
+        $this->template = TEMPLATE;
+        $this->setTemplate($this->template);
         $this->endpoint = WB_URL . $this->modulebase . $this->endpoint;
 
     }
 
+    /**
+     * Returns the latest modification timestamp of the watched directory
+     * as a JSON encoded string. Also sets the Content-Type header to
+     * application/json.
+     *
+     * @return false|string|void
+     */
     public function returnResults() {
         if(!$this->isAllowed()) return; // Only add the hook if the user is allowed
         if(!$this->isAdmin()) return; // Only add the hook if the user is an admin
@@ -47,8 +55,15 @@ class FrontendAutoReload extends Wb {
         header('Content-Type: application/json; charset=utf-8');
         $timestamp = $this->getLatestModificationTime();
         return json_encode($timestamp);
+    }
 
 
+    /**
+     * @return string
+     */
+    public function getTemplate(): string
+    {
+        return $this->template;
     }
 
 
@@ -108,6 +123,27 @@ class FrontendAutoReload extends Wb {
     public function setInterval(int $interval): void
     {
         $this->interval = $interval;
+    }
+
+    /**
+     * @param string $template
+     * @return void
+     */
+    public function setTemplate(string $template): void
+    {
+        if(!$this->isValidTemplate($template)) return;
+        $this->template = $template;
+        $this->watchedDir = WB_PATH. '/templates/' . $this->template;
+    }
+
+    /**
+     * @param string $template
+     * @return bool
+     */
+    private function isValidTemplate(string $template): bool
+    {
+        $templateDir = WB_PATH . '/templates/' . $template;
+        return is_dir($templateDir);
     }
 
 
@@ -221,7 +257,8 @@ class FrontendAutoReload extends Wb {
         return [
             'excludedDirectories' => $this->excludedDirectories,
             'excludedExtensions' => $this->excludedExtensions,
-            'interval' => $this->interval
+            'interval' => $this->interval,
+            'template' => $this->template
         ];
     }
 
@@ -245,8 +282,18 @@ class FrontendAutoReload extends Wb {
         if(is_array($data) && array_key_exists('interval', $data)) {
             $this->setInterval($data['interval']);
         }
+        if(is_array($data) && array_key_exists('template', $data)) {
+            $this->setTemplate($data['template']);
+        }
     }
 
+    /**
+     * Returns the rendered file, using the given data
+     *
+     * @param string $filename
+     * @param array $data
+     * @return string
+     */
     private function renderFile(string $filename, array $data = []): string
     {
         $base = WB_PATH . $this->modulebase;

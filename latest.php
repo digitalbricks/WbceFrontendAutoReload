@@ -1,4 +1,5 @@
 <?php
+
 // load config file to access WB constants
 require_once('../../config.php');
 

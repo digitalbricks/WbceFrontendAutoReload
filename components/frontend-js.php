@@ -6,6 +6,7 @@
 <script>
     console.log(
         'FrontendAutoReload started.\n',
+        'Watched template: <?= json_encode($far->getTemplate()) ?>\n',
         'Excluded directories: <?= json_encode($far->getExcludedDirectories()) ?>\n',
         'Excluded extensions: <?= json_encode($far->getExcludedExtensions()) ?>\n',
         'Polling interval: <?= $far->getInterval() ?> seconds\n'
