@@ -44,7 +44,7 @@ $far = frontendautoreload();
 // set polling interval to 2 seconds
 $far->setInterval(2);
 
-// exclude site/templates/assets and site/templates/vendor
+// exclude /templates/[your-template]/assets and /templates/[your-template]/vendor
 $far->setExcludedDirectories(['/assets', '/vendor']); // note the leading slash!
 
 // exclude markdown and bitmap files
