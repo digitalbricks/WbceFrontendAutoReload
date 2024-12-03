@@ -13,7 +13,7 @@
 $module_directory = 'frontendautoreload';
 $module_name = 'FrontendAutoReload';
 $module_function = 'snippet';
-$module_version = '0.0.2';
+$module_version = '0.0.3';
 $module_platform = '1.4.0';
 $module_author = 'André Herdling – Visionen & Kreationen';
 $module_license = 'MIT';
