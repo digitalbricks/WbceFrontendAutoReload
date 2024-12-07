@@ -59,7 +59,7 @@ It's important that the configuration is assigned **before** calling `renderScri
 In the default configuration, images (and the folder that can potentially contain images) are intentionally excluded. This is because the module is intended mainly to react to code changes – but you may change this behavior by using the above-mentioned methods.
 
 ## Admin only
-Please be aware that the module is designed to be only active for logged in users in admin group (be default the initial user who installed WBCE, creating the admin user account). In any other case the URL endpoint won't answer and the script won't be rendered.
+Please be aware that the module is designed to be only active for logged in users in admin group (by default the initial user who installed WBCE, creating the admin user account). In any other case the URL endpoint won't answer and the script won't be rendered.
 
 
 ## Technical Background
