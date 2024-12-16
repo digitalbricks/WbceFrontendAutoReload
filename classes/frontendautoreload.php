@@ -178,7 +178,10 @@ class FrontendAutoReload extends Wb {
 
         // Create a new FilesystemIterator
         // @source: https://www.php.net/manual/en/class.recursivedirectoryiterator.php#85805
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory), \RecursiveIteratorIterator::SELF_FIRST);
+        $iterator = new \RecursiveIteratorIterator(
+            new ExcludeFilter(new \RecursiveDirectoryIterator($directory), $this->excludedDirectories),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
 
 
         // Iterate through each file in the directory and subdirectories
