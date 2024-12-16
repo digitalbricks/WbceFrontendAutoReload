@@ -23,7 +23,8 @@ class ExcludeFilter extends \RecursiveFilterIterator {
         $this->excludedDirectories = $excludedDirectories;
     }
 
-    public function accept() {
+    public function accept(): bool
+    {
         $current = $this->current();
         if ($current->isDir()) {
             $folderRelativePath = str_replace(WB_PATH . '/templates/' . TEMPLATE, '', $current->getPathname());
@@ -32,7 +33,8 @@ class ExcludeFilter extends \RecursiveFilterIterator {
         return true;
     }
 
-    public function getChildren() {
+    public function getChildren(): ?\RecursiveFilterIterator
+    {
         return new self($this->getInnerIterator()->getChildren(), $this->excludedDirectories);
     }
 }
